@@ -157,7 +157,7 @@ const quizQuestions = [
             b: "2",
             c: "3",
         },
-        correctAnswer: "2"
+        correctAnswer: "b"
     },
     {
         questionNum: 17,
@@ -177,7 +177,7 @@ const quizQuestions = [
             b: "6th",
             c: "9th",
         },
-        correctAnswer: "9th"
+        correctAnswer: "c"
     },
     {
         questionNum: 19,
@@ -219,7 +219,7 @@ function quizStart() {
     quizContainer.innerHTML = '<h3>Test your knowledge of the 2017 Formula 1 Season</h3>';
 }
 
-$("#start").on("click", function() {
+$("#start").on("click", function () {
     quesToDom(quizQuestions);
     timer.start();
 })
@@ -251,38 +251,66 @@ function quesToDom(quizArray) {
 
 //to Dom for wrong answer
 function corAnsToDom() {
-    submitButton.style.display = 'none'
-    const output = [];
-    output.push(
-        `<div class="question"> ${quizQuestions[currentQuestion].question} </div>
-                <div class="answers"> 'The correct answer was - ${quizQuestions[currentQuestion].answers[quizQuestions[currentQuestion].correctAnswer]}' </div>`
-    );
-    answerImage.style.display = 'inline-block';
-    document.getElementById("images").innerHTML = `<img src = "assets/images/${currentQuestion+1}.jpg">`;
-    quizContainer.innerHTML = output.join('');
-    currentQuestion++;
-    timer.reset();
-    setTimeout(quesToDom, 3000);
-    setTimeout(timer.start, 3000);
+    if (quizQuestions[currentQuestion].questionNum === quizQuestions.length) {
+        submitButton.style.display = 'none'
+        const output = [];
+        output.push(
+            `<div class="question"> ${quizQuestions[currentQuestion].question} </div>
+                    <div class="answers"> '<b>The correct answer was - ${quizQuestions[currentQuestion].answers[quizQuestions[currentQuestion].correctAnswer]}</b>' </div>`
+        );
+        answerImage.style.display = 'inline-block';
+        document.getElementById("images").innerHTML = `<img src = "assets/images/${currentQuestion + 1}.jpg">`;
+        quizContainer.innerHTML = output.join('');
+        setTimeout(gameOver, 3000);
+
+    } else {
+        submitButton.style.display = 'none'
+        const output = [];
+        output.push(
+            `<div class="question"> ${quizQuestions[currentQuestion].question} </div>
+                <div class="answers"> '<b>The correct answer was - ${quizQuestions[currentQuestion].answers[quizQuestions[currentQuestion].correctAnswer]}</b>' </div>`
+        );
+        answerImage.style.display = 'inline-block';
+        document.getElementById("images").innerHTML = `<img src = "assets/images/${currentQuestion + 1}.jpg">`;
+        quizContainer.innerHTML = output.join('');
+        currentQuestion++;
+        timer.reset();
+        setTimeout(quesToDom, 3000);
+        setTimeout(timer.start, 3000);
+    }
 }
 //to Dom for right answer
 function ansCorToDom() {
-    submitButton.style.display = 'none'
-    const output = [];
-    output.push(
-        `<div class="question"> ${quizQuestions[currentQuestion].question} </div>
-        <div class="answers"> 'You are right! The answer was - ${quizQuestions[currentQuestion].answers[quizQuestions[currentQuestion].correctAnswer]}' </div>`
-    );
-    answerImage.style.display = 'inline-block';
-    document.getElementById("images").innerHTML = `<img src = "assets/images/${currentQuestion+1}.jpg">`;
-    quizContainer.innerHTML = output.join('');
-    currentQuestion++;
-    timer.reset();
-    setTimeout(quesToDom, 3000);
-    setTimeout(timer.start, 3000);
+    if (quizQuestions[currentQuestion].questionNum === quizQuestions.length) {
+        submitButton.style.display = 'none'
+        const output = [];
+        output.push(
+            `<div class="question"> ${quizQuestions[currentQuestion].question} </div>
+                    <div class="answers"> '<b>You are right! The answer was - ${quizQuestions[currentQuestion].answers[quizQuestions[currentQuestion].correctAnswer]}</b>' </div>`
+        );
+        answerImage.style.display = 'inline-block';
+        document.getElementById("images").innerHTML = `<img src = "assets/images/${currentQuestion + 1}.jpg">`;
+        quizContainer.innerHTML = output.join('');
+        setTimeout(gameOver, 3000);
+    } else {
+        submitButton.style.display = 'none'
+        const output = [];
+        output.push(
+            `<div class="question"> ${quizQuestions[currentQuestion].question} </div>
+        <div class="answers"> '<b>You are right! The answer was - ${quizQuestions[currentQuestion].answers[quizQuestions[currentQuestion].correctAnswer]}</b>' </div>`
+        );
+        answerImage.style.display = 'inline-block';
+        document.getElementById("images").innerHTML = `<img src = "assets/images/${currentQuestion + 1}.jpg">`;
+        quizContainer.innerHTML = output.join('');
+        currentQuestion++;
+        timer.reset();
+        setTimeout(quesToDom, 3000);
+        setTimeout(timer.start, 3000);
+    }
 }
 
 function gameOver() {
+    answerImage.style.display = 'none';
     timer.reset();
     submitButton.style.display = 'none'
     tryAgainButton.style.display = 'inline'
@@ -292,10 +320,7 @@ function gameOver() {
 
 //check answers
 $("#submit").on("click", function () {
-    if (quizQuestions[currentQuestion].questionNum === quizQuestions.length) {
-        gameOver();
-    }
-    else if (document.querySelector(`input[name="question${quizQuestions[currentQuestion].questionNum}"]:checked`).value === quizQuestions[currentQuestion].correctAnswer) {
+    if (document.querySelector(`input[name="question${quizQuestions[currentQuestion].questionNum}"]:checked`).value === quizQuestions[currentQuestion].correctAnswer) {
         numCorrect++;
         ansCorToDom();
     } else {
