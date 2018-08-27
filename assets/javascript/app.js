@@ -216,7 +216,7 @@ const answerImage = document.getElementById("images");
 function quizStart() {
     tryAgainButton.style.display = 'none';
     submitButton.style.display = 'none';
-    quizContainer.innerHTML = '<h3>"Test your knowledge of the 2017 Formula 1 Season"</h3>';
+    quizContainer.innerHTML = '<h3>Test your knowledge of the 2017 Formula 1 Season</h3>';
 }
 
 $("#start").on("click", function() {
